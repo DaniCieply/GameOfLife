@@ -5,9 +5,10 @@ PointMap::PointMap(int size)
 	vertices.setPrimitiveType(sf::Points);
 	vertices.resize(size);
 
-	width = sqrt(size);
 	this->size = size;
+	width = sqrt(this->size);
 
+	// Sets all 2D coordinates of points
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < width; y++)
