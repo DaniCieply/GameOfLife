@@ -22,7 +22,7 @@ int genRandInt(int start, int end)
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * 2, GRID_HEIGHT), "Conway's Game of Life");
+    sf::RenderWindow window(sf::VideoMode(GRID_WIDTH * 2, GRID_HEIGHT), "Conway's Game of Life", sf::Style::Titlebar | sf::Style::Close);
 
     sf::Clock frameClock; // Used for calculating Framerate
     sf::Clock deltaClock; // ImGui clock
@@ -194,6 +194,8 @@ int main()
         ImGui::Begin("Options");
         ImGui::SetWindowPos(ImVec2(GRID_WIDTH + 10, 10));
         ImGui::SetWindowSize(ImVec2(GRID_WIDTH / 1.1f, GRID_HEIGHT / 1.1f));
+        std::string fpsString = "FPS: " + std::to_string(Framerate);
+        ImGui::Text(fpsString.c_str());
 
         ImGui::SliderFloat("Sim Speed", &gameSpeed, 0.0f, 10.0f);
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
@@ -210,8 +212,6 @@ int main()
         {
             window.close();
         }
-
-        std::cout << Framerate << std::endl;
 
         // Draw
         window.clear();
