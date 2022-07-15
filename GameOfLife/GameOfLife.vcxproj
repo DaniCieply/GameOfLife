@@ -134,6 +134,7 @@
     <ClCompile Include="src\GameOfLife.cpp" />
     <ClCompile Include="src\imgui\imgui-SFML.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\ImGuiFileDialog.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
@@ -141,11 +142,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\imgui\dirent\dirent.h" />
     <ClInclude Include="src\imgui\imconfig-SFML.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui-SFML.h" />
     <ClInclude Include="src\imgui\imgui-SFML_export.h" />
     <ClInclude Include="src\imgui\imgui.h" />
+    <ClInclude Include="src\imgui\ImGuiFileDialog.h" />
+    <ClInclude Include="src\imgui\ImGuiFileDialogConfig.h" />
     <ClInclude Include="src\imgui\imgui_internal.h" />
     <ClInclude Include="src\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\imgui\imstb_textedit.h" />
