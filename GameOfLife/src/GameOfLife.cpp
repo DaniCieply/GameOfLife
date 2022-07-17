@@ -3,16 +3,15 @@
 #include <imgui-SFML.h>
 #include <ImGuiFileDialog.h>
 #include <random>
-#include <array>
 #include <fstream>
 #include "PointMap.h"
 
-using std::array;
 using std::vector;
 using std::fstream;
 
 const int GRID_WIDTH = 500;
 const int GRID_HEIGHT = 500;
+const int GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 
 int genRandInt(int start, int end)
 {
@@ -21,13 +20,13 @@ int genRandInt(int start, int end)
     return std::uniform_int_distribution<>{start, end}(ran);
 }
 
-void saveGrid(array<bool, GRID_WIDTH* GRID_HEIGHT>& sArray, std::string filePath)
+void saveGrid(vector<bool>& sVect, std::string filePath)
 {
     fstream file;
     file.open(filePath, std::ios::out);
     if (file.is_open())
     {
-        for (bool b : sArray)
+        for (bool b : sVect)
         {
             file << b;
         }
@@ -36,7 +35,7 @@ void saveGrid(array<bool, GRID_WIDTH* GRID_HEIGHT>& sArray, std::string filePath
     file.close();
 }
 
-void loadGrid(array<bool, GRID_WIDTH* GRID_HEIGHT>& lArray, std::string filePath)
+void loadGrid(vector<bool>& lVect, std::string filePath)
 {
     fstream file;
     file.open(filePath, std::ios::in);
@@ -50,11 +49,11 @@ void loadGrid(array<bool, GRID_WIDTH* GRID_HEIGHT>& lArray, std::string filePath
         {
             if (c == '0')
             {
-                lArray[i] = false;
+                lVect[i] = false;
             }
             else if (c == '1')
             {
-                lArray[i] = true;
+                lVect[i] = true;
             }
 
             i++;
@@ -65,18 +64,18 @@ void loadGrid(array<bool, GRID_WIDTH* GRID_HEIGHT>& lArray, std::string filePath
 }
 
 
-void randomizeArray(array<bool, GRID_WIDTH * GRID_HEIGHT>& array, int aliveChance)
+void randomizeVector(vector<bool>& vect, int aliveChance)
 {
-    for (int i = 0; i < GRID_WIDTH * GRID_HEIGHT; i++)
+    for (int i = 0; i < GRID_SIZE; i++)
     {
         int randNum = genRandInt(1, 10);
         if (randNum <= aliveChance)
         {
-            array[i] = true;
+            vect[i] = true;
         }
         else
         {
-            array[i] = false;
+            vect[i] = false;
         }
     }
 }
@@ -104,19 +103,19 @@ int main()
     float deadCellColor[3] = { (float)0 / 255, (float)0 / 255, (float)0 / 255 };
 
     // Visual of game that is drawn to screen
-    PointMap pointMap(GRID_WIDTH * GRID_HEIGHT);
+    PointMap pointMap(GRID_SIZE);
     pointMap.setAllPointColor(sf::Color::Transparent);
 
     // Arrays of cell states
-    array<bool, GRID_WIDTH * GRID_HEIGHT> frontArray;
-    array<bool, GRID_WIDTH * GRID_HEIGHT> backArray;
+    vector<bool> frontVect(GRID_SIZE);
+    vector<bool> backVect(GRID_SIZE);
 
-    randomizeArray(frontArray, aliveChance);
+    randomizeVector(frontVect, aliveChance);
 
     // Sets all back array cells false by default
-    for (int i = 0; i < backArray.size(); i++)
+    for (int i = 0; i < backVect.size(); i++)
     {
-        backArray[i] = false;
+        backVect[i] = false;
     }
 
     // Main Loop
@@ -157,46 +156,46 @@ int main()
                     int numDead = 0;
 
                     // Read the values of the front array and change the values of the back array
-                    bool& frontCellVal = frontArray[x * GRID_WIDTH + y];
-                    bool& backCellVal = backArray[x * GRID_WIDTH + y];
+                    bool frontCellVal = frontVect[x * GRID_WIDTH + y];
+                    bool backCellVal = backVect[x * GRID_WIDTH + y];
                     if (x - 1 >= 0 && y + 1 <= GRID_HEIGHT - 1) 
                     {
-                        if (frontArray[(x - 1) * GRID_WIDTH + (y + 1)]) numAlive++;
+                        if (frontVect[(x - 1) * GRID_WIDTH + (y + 1)]) numAlive++;
                         else numDead++;
                     }
                     if (y + 1 <= GRID_HEIGHT - 1) 
                     {
-                        if (frontArray[x * GRID_WIDTH + (y + 1)]) numAlive++;
+                        if (frontVect[x * GRID_WIDTH + (y + 1)]) numAlive++;
                         else numDead++;
                     }
                     if (x + 1 <= GRID_WIDTH - 1 && y + 1 <= GRID_HEIGHT - 1)
                     {
-                        if (frontArray[(x + 1) * GRID_WIDTH + (y + 1)]) numAlive++;
+                        if (frontVect[(x + 1) * GRID_WIDTH + (y + 1)]) numAlive++;
                         else numDead++;
                     }
                     if (x + 1 <= GRID_WIDTH - 1) 
                     {
-                        if (frontArray[(x + 1) * GRID_WIDTH + y]) numAlive++;
+                        if (frontVect[(x + 1) * GRID_WIDTH + y]) numAlive++;
                         else numDead++;
                     }
                     if (x + 1 <= GRID_WIDTH - 1 && y - 1 >= 0)
                     {
-                        if (frontArray[(x + 1) * GRID_WIDTH + (y - 1)]) numAlive++;
+                        if (frontVect[(x + 1) * GRID_WIDTH + (y - 1)]) numAlive++;
                         else numDead++;
                     }
                     if (y - 1 >= 0)
                     {
-                        if (frontArray[x * GRID_WIDTH + (y - 1)]) numAlive++;
+                        if (frontVect[x * GRID_WIDTH + (y - 1)]) numAlive++;
                         else numDead++;
                     }
                     if (x - 1 >= 0 && y - 1 >= 0) 
                     {
-                        if (frontArray[(x - 1) * GRID_WIDTH + (y - 1)]) numAlive++;
+                        if (frontVect[(x - 1) * GRID_WIDTH + (y - 1)]) numAlive++;
                         else numDead++;
                     }
                     if (x - 1 >= 0)
                     {
-                        if (frontArray[(x - 1) * GRID_WIDTH + y]) numAlive++;
+                        if (frontVect[(x - 1) * GRID_WIDTH + y]) numAlive++;
                         else numDead++;
                     }
 
@@ -223,16 +222,20 @@ int main()
                             backCellVal = true;
                         }
                     }
+
+                    // Copies updated cells back to vectors because for some dumb reason, i can't use vector values as a reference
+                    frontVect[x * GRID_WIDTH + y] = frontCellVal;
+                    backVect[x * GRID_WIDTH + y] = backCellVal;
                 }
             }
 
-            frontArray = backArray;
+            frontVect = backVect;
         }
         
         // Changes colors of point map based upon front array
         for (int i = 0; i < GRID_WIDTH * GRID_HEIGHT; i++) 
         {
-            if (frontArray[i])
+            if (frontVect[i])
             {
                 pointMap.setPointColor(i, sf::Color::White);
             }
@@ -271,7 +274,7 @@ int main()
                 filePath = ImGuiFileDialog::Instance()->GetFilePathName();
             }
 
-            saveGrid(frontArray, filePath);
+            saveGrid(frontVect, filePath);
             ImGuiFileDialog::Instance()->Close();
         }
         
@@ -286,7 +289,7 @@ int main()
                 filePath = ImGuiFileDialog::Instance()->GetFilePathName();
             }
 
-            loadGrid(frontArray, filePath);
+            loadGrid(frontVect, filePath);
             ImGuiFileDialog::Instance()->Close();
         }
 
@@ -308,7 +311,7 @@ int main()
         ImGui::ColorEdit3("Dead Cell Color", deadCellColor);
         for (int i = 0; i < GRID_WIDTH * GRID_HEIGHT; i++)
         {
-            if (frontArray[i])
+            if (frontVect[i])
                 pointMap.setPointColor(i, sf::Color((int)(liveCellColor[0] * 255), (int)(liveCellColor[1] * 255), (int)(liveCellColor[2] * 255)));
             else
                 pointMap.setPointColor(i, sf::Color((int)(deadCellColor[0] * 255), (int)(deadCellColor[1] * 255), (int)(deadCellColor[2] * 255)));
@@ -317,12 +320,12 @@ int main()
         // Randomizes the sim on click
         if (ImGui::Button("Randomize"))
         {
-            randomizeArray(frontArray, aliveChance);
+            randomizeVector(frontVect, aliveChance);
         }
         
         ImGui::End();
         
-        // Draw
+        // Draw 
         window.clear();
         window.draw(pointMap);
         ImGui::SFML::Render(window);
