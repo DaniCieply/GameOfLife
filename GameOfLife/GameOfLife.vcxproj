@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="src\imgui\dirent\dirent.h" />
     <ClInclude Include="src\imgui\imconfig-SFML.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
@@ -166,10 +167,11 @@
     <ClInclude Include="src\PointMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GameOfLife.rc" />
+    <Image Include="..\..\GameOfLife.ico" />
+    <Image Include="..\GameOfLife.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\GameOfLife.ico" />
+    <ResourceCompile Include="GameOfLife.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
